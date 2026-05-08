@@ -1,0 +1,22 @@
+# Binaries
+employees-api
+*.exe
+*.dll
+*.so
+
+# Go
+vendor/
+*.out
+
+# Environment
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+.dockerignore
