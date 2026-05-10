@@ -8,6 +8,24 @@ import (
 	"strings"
 )
 
+func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Origin")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+
+		// Handle preflight requests
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next(w, r)
+	}
+}
+
 func router(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	method := r.Method
@@ -41,6 +59,26 @@ func router(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasPrefix(path, "/api/v1/dept_manager") {
 		handleDeptManager(w, r)
+		return
+	}
+	if strings.HasPrefix(path, "/api/v1/salary_groups") {
+		handleSalaryGroups(w, r)
+		return
+	}
+	if strings.HasPrefix(path, "/api/v1/sg_emp") {
+		handleSgEmp(w, r)
+		return
+	}
+	if strings.HasPrefix(path, "/api/v1/countries") {
+		handleCountries(w, r)
+		return
+	}
+	if strings.HasPrefix(path, "/api/v1/regions") {
+		handleRegions(w, r)
+		return
+	}
+	if strings.HasPrefix(path, "/api/v1/region_emp") {
+		handleRegionEmp(w, r)
 		return
 	}
 
@@ -227,6 +265,156 @@ func handleDeptManager(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleSalaryGroups(w http.ResponseWriter, r *http.Request) {
+	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/v1/salary_groups"), "/")
+	hasID := len(parts) > 1 && parts[1] != ""
+
+	switch r.Method {
+	case "GET":
+		if hasID {
+			getSalaryGroup(w, r)
+		} else {
+			listSalaryGroups(w, r)
+		}
+	case "POST":
+		createSalaryGroup(w, r)
+	case "PUT":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for PUT"})
+			return
+		}
+		updateSalaryGroup(w, r)
+	case "DELETE":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for DELETE"})
+			return
+		}
+		deleteSalaryGroup(w, r)
+	default:
+		writeJSON(w, http.StatusMethodNotAllowed, APIResponse{Success: false, Error: "Method not allowed"})
+	}
+}
+
+func handleSgEmp(w http.ResponseWriter, r *http.Request) {
+	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/v1/sg_emp"), "/")
+	hasID := len(parts) > 1 && parts[1] != ""
+
+	switch r.Method {
+	case "GET":
+		if hasID {
+			getSgEmp(w, r)
+		} else {
+			listSgEmp(w, r)
+		}
+	case "POST":
+		createSgEmp(w, r)
+	case "PUT":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for PUT"})
+			return
+		}
+		updateSgEmp(w, r)
+	case "DELETE":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for DELETE"})
+			return
+		}
+		deleteSgEmp(w, r)
+	default:
+		writeJSON(w, http.StatusMethodNotAllowed, APIResponse{Success: false, Error: "Method not allowed"})
+	}
+}
+
+func handleCountries(w http.ResponseWriter, r *http.Request) {
+	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/v1/countries"), "/")
+	hasID := len(parts) > 1 && parts[1] != ""
+
+	switch r.Method {
+	case "GET":
+		if hasID {
+			getCountry(w, r)
+		} else {
+			listCountries(w, r)
+		}
+	case "POST":
+		createCountry(w, r)
+	case "PUT":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for PUT"})
+			return
+		}
+		updateCountry(w, r)
+	case "DELETE":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for DELETE"})
+			return
+		}
+		deleteCountry(w, r)
+	default:
+		writeJSON(w, http.StatusMethodNotAllowed, APIResponse{Success: false, Error: "Method not allowed"})
+	}
+}
+
+func handleRegions(w http.ResponseWriter, r *http.Request) {
+	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/v1/regions"), "/")
+	hasID := len(parts) > 1 && parts[1] != ""
+
+	switch r.Method {
+	case "GET":
+		if hasID {
+			getRegion(w, r)
+		} else {
+			listRegions(w, r)
+		}
+	case "POST":
+		createRegion(w, r)
+	case "PUT":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for PUT"})
+			return
+		}
+		updateRegion(w, r)
+	case "DELETE":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for DELETE"})
+			return
+		}
+		deleteRegion(w, r)
+	default:
+		writeJSON(w, http.StatusMethodNotAllowed, APIResponse{Success: false, Error: "Method not allowed"})
+	}
+}
+
+func handleRegionEmp(w http.ResponseWriter, r *http.Request) {
+	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/v1/region_emp"), "/")
+	hasID := len(parts) > 1 && parts[1] != ""
+
+	switch r.Method {
+	case "GET":
+		if hasID {
+			getRegionEmp(w, r)
+		} else {
+			listRegionEmp(w, r)
+		}
+	case "POST":
+		createRegionEmp(w, r)
+	case "PUT":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for PUT"})
+			return
+		}
+		updateRegionEmp(w, r)
+	case "DELETE":
+		if !hasID {
+			writeJSON(w, http.StatusBadRequest, APIResponse{Success: false, Error: "ID required for DELETE"})
+			return
+		}
+		deleteRegionEmp(w, r)
+	default:
+		writeJSON(w, http.StatusMethodNotAllowed, APIResponse{Success: false, Error: "Method not allowed"})
+	}
+}
+
 func main() {
 	// Load environment
 	// dbHost := os.Getenv("DB_HOST")
@@ -259,7 +447,7 @@ func main() {
 	}
 
 	log.Printf("[INFO] Starting server on port %s\n", port)
-	http.HandleFunc("/", router)
+	http.HandleFunc("/", corsMiddleware(router))
 
 	server := &http.Server{
 		Addr: fmt.Sprintf(":%s", port),

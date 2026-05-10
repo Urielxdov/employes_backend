@@ -22,9 +22,9 @@
 --  Any similarity to existing people is purely coincidental.
 --
 
-DROP DATABASE IF EXISTS mysql_employees;
-CREATE DATABASE IF NOT EXISTS mysql_employees;
-USE mysql_employees;
+DROP DATABASE IF EXISTS employees;
+CREATE DATABASE IF NOT EXISTS employees;
+USE employees;
 
 -- define some handy variables
 set @unknown_date_of_birth='1900-01-01';
@@ -211,3 +211,5 @@ source load_regions.dump ;
 
 
 source show_elapsed.sql ;
+
+RENAME TABLE employee TO employees;
