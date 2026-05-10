@@ -8,10 +8,11 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: employees
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./mysql-employees.sql:/docker-entrypoint-initdb.d/employees.sql
+      - ./mysql-employees-master:/docker-entrypoint-initdb.d
+    working_dir: /docker-entrypoint-initdb.d
     networks:
       - employees-net
     healthcheck:
@@ -40,7 +41,7 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
       interval: 10s
       timeout: 3s
-      retries: 3
+      retries: 10
 
 volumes:
   mysql_data:

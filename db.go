@@ -32,7 +32,7 @@ func initDB() error {
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	// Retry connection for 30s (Docker startup timing)
-	for i := 0; i < 6; i++ {
+	for i := 0; i < 60; i++ {
 		err = db.Ping()
 		if err == nil {
 			log.Println("[DB] Connected successfully")

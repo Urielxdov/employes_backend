@@ -229,20 +229,20 @@ func handleDeptManager(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	// Load environment
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv("DB_PASS")
+	// dbHost := os.Getenv("DB_HOST")
+	// dbPort := os.Getenv("DB_PORT")
+	// dbUser := os.Getenv("DB_USER")
+	// dbPass := os.Getenv("DB_PASS")
 
-	if dbHost == "" {
-		dbHost = "localhost"
-	}
-	if dbPort == "" {
-		dbPort = "3306"
-	}
-	if dbUser == "" {
-		dbUser = "root"
-	}
+	// if dbHost == "" {
+	// 	dbHost = "localhost"
+	// }
+	// if dbPort == "" {
+	// 	dbPort = "3306"
+	// }
+	// if dbUser == "" {
+	// 	dbUser = "root"
+	// }
 
 	// Initialize database
 	log.Println("[INIT] Connecting to database...")
