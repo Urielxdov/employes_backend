@@ -211,5 +211,6 @@ source load_regions.dump ;
 
 
 source show_elapsed.sql ;
-
-RENAME TABLE employee TO employees;
+SET GLOBAL sql_mode = '';
+-- O uno más específico que quite el modo estricto de fechas:
+SET GLOBAL sql_mode = 'ALLOW_INVALID_DATES';
